@@ -18,6 +18,7 @@ requirements:
     - {{ compiler('c') }}
     - automake  # [unix]
     - make  # [unix]
+    - libtool  # [unix]
   host:
     - glib >=2  # [win]
     - libiconv  # [osx]

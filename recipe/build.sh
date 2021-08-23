@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# Get an updated config.sub and config.guess
+cp -r ${BUILD_PREFIX}/share/libtool/build-aux/config.* .
+# Get an updated config.sub and config.guess
+cp -r ${BUILD_PREFIX}/share/libtool/build-aux/config.* ./glib
+
 mkdir -p ${PREFIX}/include
 
 ./configure --prefix=${PREFIX}    \
