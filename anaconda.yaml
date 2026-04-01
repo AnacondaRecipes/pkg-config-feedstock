@@ -1,0 +1,5 @@
+anaconda_config_version: 1
+upstream_sources:
+  - webpage:
+      url: https://pkgconfig.freedesktop.org/releases/
+      regex: pkg-config-([\d.]+)\.tar\.gz
