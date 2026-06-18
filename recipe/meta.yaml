@@ -12,26 +12,27 @@ source:
 
 build:
   number: 1
-  skip: True  # [win and vc<14]
   detect_binary_files_with_prefix: True
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - automake  # [unix]
     - make  # [unix]
     - libtool  # [unix]
   host:
-    - glib >=2  # [win]
-    - libiconv  # [osx]
+    - glib {{ glib }}  # [win]
+    - libiconv {{ libiconv }}  # [osx]
 
 test:
   commands:
     - pkg-config --help
 
 about:
-  home: http://www.freedesktop.org/wiki/Software/pkg-config/
-  license: GPL 2
+  home: https://www.freedesktop.org/wiki/Software/pkg-config/
+  license: GPL-2.0-or-later
+  license_family: GPL
   license_file: COPYING
   summary: Interface for querying installed libraries for use during compilation.
 
@@ -40,7 +41,6 @@ about:
     flags when compiling/linking a lot easier.
   doc_url: https://people.freedesktop.org/~dbn/pkg-config-guide.html
   dev_url: https://cgit.freedesktop.org/pkg-config
-  doc_source_url:
 
 extra:
   recipe-maintainers:
