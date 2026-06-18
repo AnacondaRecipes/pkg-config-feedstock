@@ -7,6 +7,8 @@ package:
 source:
   url: https://pkg-config.freedesktop.org/releases/pkg-config-{{ version }}.tar.gz
   sha256: 6fc69c01688c9458a57eb9a1664c9aba372ccda420a02bf4429fe610e7e7d591
+  patches:
+    - 0001-Backport-gssize-guintptr-atomics-in-builtin-glib.patch  # [unix]
 
 build:
   number: 1
