@@ -7,29 +7,32 @@ package:
 source:
   url: https://pkg-config.freedesktop.org/releases/pkg-config-{{ version }}.tar.gz
   sha256: 6fc69c01688c9458a57eb9a1664c9aba372ccda420a02bf4429fe610e7e7d591
+  patches:
+    - 0001-Backport-gssize-guintptr-atomics-in-builtin-glib.patch  # [unix]
 
 build:
-  number: 0
-  skip: True  # [win and vc<14]
+  number: 1
   detect_binary_files_with_prefix: True
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - automake  # [unix]
     - make  # [unix]
     - libtool  # [unix]
   host:
-    - glib >=2  # [win]
-    - libiconv  # [osx]
+    - glib {{ glib }}  # [win]
+    - libiconv {{ libiconv }}  # [osx]
 
 test:
   commands:
     - pkg-config --help
 
 about:
-  home: http://www.freedesktop.org/wiki/Software/pkg-config/
-  license: GPL 2
+  home: https://www.freedesktop.org/wiki/Software/pkg-config/
+  license: GPL-2.0-or-later
+  license_family: GPL
   license_file: COPYING
   summary: Interface for querying installed libraries for use during compilation.
 
@@ -38,7 +41,6 @@ about:
     flags when compiling/linking a lot easier.
   doc_url: https://people.freedesktop.org/~dbn/pkg-config-guide.html
   dev_url: https://cgit.freedesktop.org/pkg-config
-  doc_source_url:
 
 extra:
   recipe-maintainers:

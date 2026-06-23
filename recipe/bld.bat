@@ -1,22 +1,34 @@
 @echo ON
 
-if "%ARCH%" == "64" (
-  mkdir release\
-  mkdir release\x64
-  mkdir release\x64\pkg-config
-
+:: Determine platform (PLAT) and linker machine type (LDFLAGS_ARCH) from target_platform
+:: Makefile.vc outputs to $(CFG)\$(PLAT)\pkg-config.exe
+if "%target_platform%" == "win-arm64" (
+  set "PLAT=ARM64"
+  set "LDFLAGS_ARCH=/machine:ARM64"
+) else if "%target_platform%" == "win-64" (
+  set "PLAT=x64"
+  set "LDFLAGS_ARCH=/machine:X64"
+) else if "%target_platform%" == "win-32" (
+  set "PLAT=Win32"
+  set "LDFLAGS_ARCH=/machine:X86"
 ) else (
-  mkdir release\
-  mkdir release\Win32
-  mkdir release\Win32\pkg-config
+  :: Fallback for older conda-build versions using ARCH
+  if "%ARCH%" == "64" (
+    set "PLAT=x64"
+    set "LDFLAGS_ARCH=/machine:X64"
+  ) else (
+    set "PLAT=Win32"
+    set "LDFLAGS_ARCH=/machine:X86"
+  )
 )
-nmake /f Makefile.vc CFG=release GLIB_PREFIX=%LIBRARY_PREFIX%
+
+echo Building for platform: %PLAT% (linker: %LDFLAGS_ARCH%)
+
+:: Pre-create output directories (Makefile.vc's mkdir may fail due to Unix mkdir in PATH)
+if not exist release\%PLAT%\pkg-config mkdir release\%PLAT%\pkg-config
+
+nmake /f Makefile.vc CFG=release GLIB_PREFIX=%LIBRARY_PREFIX% PLAT=%PLAT% LDFLAGS_ARCH=%LDFLAGS_ARCH%
 if errorlevel 1 exit 1
 
-if "%ARCH%" == "64" (
-  copy release\x64\pkg-config.exe %LIBRARY_PREFIX%\bin\pkg-config.exe
-) else (
-  copy release\Win32\pkg-config.exe %LIBRARY_PREFIX%\bin\pkg-config.exe
-)
-
+copy release\%PLAT%\pkg-config.exe %LIBRARY_PREFIX%\bin\pkg-config.exe
 if errorlevel 1 exit 1
